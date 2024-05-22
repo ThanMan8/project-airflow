@@ -15,29 +15,80 @@ data "aws_availability_zones" "available" {}
 ##################################################################################
 # RESOURCES
 ##################################################################################
-locals {
-  common_tags = {
-    BillingCode = var.billing_code
-    Workspace   = terraform.workspace
+resource "aws_mwaa_environment" "managed_airflow" {
+  airflow_version                = "2.2.2"
+  airflow_configuration_options  = {
+    "core.load_default_connections" ="false"
+    "core.dag_file_processor_timeout"= 150
+    "core.dagbag_import_timeout"= 90
+    "core.load_examples"="false"
+  }
+
+  dag_s3_path                    = "dags/" #(checking in s3 bucket airflow the file dags/) 
+  execution_role_arn             = module.execution_role.role_arn
+  name                           = "airflow-env-thanos"
+  environment_class              = "mw1.small"
+
+  network_configuration {
+    security_group_ids = [aws_security_group.managed_airflow_sg.id]
+    subnet_ids         = [for s in aws_subnet.private : s.id]
+  }
+
+  source_bucket_arn               = aws_s3_bucket.managed-airflow-bucket.arn
+  weekly_maintenance_window_start = "SUN:19:00"
+
+  logging_configuration {
+    dag_processing_logs {
+      enabled   = true
+      log_level = "WARNING"
+    }
+
+    scheduler_logs {
+      enabled   = true
+      log_level = "WARNING"
+    }
+
+    task_logs {
+      enabled   = true
+      log_level = "WARNING"
+    }
+
+    webserver_logs {
+      enabled   = true
+      log_level = "WARNING"
+    }
+
+    worker_logs {
+      enabled   = true
+      log_level = "WARNING"
+    }
+  }
+
+  tags = {
+    name = "airflow-dev-name"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      requirements_s3_object_version,
+      plugins_s3_object_version,
+    ]
   }
 }
 
-module "main" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "5.0.0"
+resource "aws_vpc" "vpc-airflow" {
+  cidr_block           = var.vpc_cidr_block
 
-  name = var.prefix
-  cidr = var.cidr_block
+  tags = "vpc-airflow-dev"
+}
 
-  azs                     = slice(data.aws_availability_zones.available.names, 0, length(var.public_subnets))
-  public_subnets          = [for k, v in var.public_subnets : v]
-  public_subnet_names     = [for k, v in var.public_subnets : "${var.prefix}-${k}"]
-  enable_dns_hostnames    = true
-  public_subnet_suffix    = ""
-  public_route_table_tags = { Name = "${var.prefix}-public" }
+resource "aws_subnet" "private" {
+  for_each = var.private_subnets
+  vpc_id            = aws_vpc.vpc-airflow.id
+  cidr_block        = each.value
   map_public_ip_on_launch = true
 
-  enable_nat_gateway = false
-
-  tags = local.common_tags
+  tags = {
+    Name = "${each.key}-subnet"
+  }
 }
