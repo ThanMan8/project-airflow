@@ -90,6 +90,18 @@ data "aws_iam_policy_document" "execution_role_policy" {
 resource "aws_iam_role" "role" {
   name = "airflow-execution-role"
   path = "/"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "airflow.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
   tags = { name="I-am-role-dev"}
 }
 
