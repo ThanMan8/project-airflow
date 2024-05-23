@@ -102,7 +102,7 @@ resource "aws_iam_role" "role" {
       }
     ]
   })
-  tags = { name="I-am-role-dev"}
+  tags = { name = "I-am-role-dev" }
 }
 
 resource "aws_iam_role_policy" "role-policy" {

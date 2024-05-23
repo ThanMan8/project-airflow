@@ -25,7 +25,7 @@ resource "aws_mwaa_environment" "managed_airflow" {
   }
 
   dag_s3_path        = "dags/" #(checking in s3 bucket airflow the file dags/) 
-  execution_role_arn = aws_iam_role.role.role_arn
+  execution_role_arn = aws_iam_role.role.arn
   name               = "airflow-env-thanos"
   environment_class  = "mw1.small"
 
@@ -80,7 +80,7 @@ resource "aws_vpc" "vpc-airflow" {
   cidr_block = var.vpc_cidr_block
 
   tags = {
-    name="vpc-airflow-dev"}
+  name = "vpc-airflow-dev" }
 }
 
 resource "aws_subnet" "private" {
