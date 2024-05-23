@@ -90,7 +90,7 @@ data "aws_iam_policy_document" "execution_role_policy" {
 resource "aws_iam_role" "role" {
   name = "airflow-execution-role"
   path = "/"
-  tags = "I-am-role-dev"
+  tags = { name="I-am-role-dev"}
 }
 
 resource "aws_iam_role_policy" "role-policy" {
