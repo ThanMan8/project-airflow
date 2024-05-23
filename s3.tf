@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "managed-airflow-bucket" {
   force_destroy = "false"
 
   tags = {
-    Name          = "airflow-bucket-sw"
+    Name = "airflow-bucket-sw"
   }
 }
 

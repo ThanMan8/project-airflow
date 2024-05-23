@@ -3,11 +3,11 @@
 ##################################################################################
 
 resource "aws_security_group" "managed_airflow_sg" {
-  name        = "managed_airflow-sg"
-  vpc_id      = aws_vpc.vpc-airflow.id
+  name   = "managed_airflow-sg"
+  vpc_id = aws_vpc.vpc-airflow.id
 
   tags = {
-    Name          = "managed-airflow-sg"
+    Name = "managed-airflow-sg"
   }
 }
 

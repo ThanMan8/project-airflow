@@ -16,18 +16,18 @@ data "aws_availability_zones" "available" {}
 # RESOURCES
 ##################################################################################
 resource "aws_mwaa_environment" "managed_airflow" {
-  airflow_version                = "2.2.2"
-  airflow_configuration_options  = {
-    "core.load_default_connections" ="false"
-    "core.dag_file_processor_timeout"= 150
-    "core.dagbag_import_timeout"= 90
-    "core.load_examples"="false"
+  airflow_version = "2.2.2"
+  airflow_configuration_options = {
+    "core.load_default_connections"   = "false"
+    "core.dag_file_processor_timeout" = 150
+    "core.dagbag_import_timeout"      = 90
+    "core.load_examples"              = "false"
   }
 
-  dag_s3_path                    = "dags/" #(checking in s3 bucket airflow the file dags/) 
-  execution_role_arn             = module.execution_role.role_arn
-  name                           = "airflow-env-thanos"
-  environment_class              = "mw1.small"
+  dag_s3_path        = "dags/" #(checking in s3 bucket airflow the file dags/) 
+  execution_role_arn = aws_iam_role.role.role_arn
+  name               = "airflow-env-thanos"
+  environment_class  = "mw1.small"
 
   network_configuration {
     security_group_ids = [aws_security_group.managed_airflow_sg.id]
@@ -77,15 +77,15 @@ resource "aws_mwaa_environment" "managed_airflow" {
 }
 
 resource "aws_vpc" "vpc-airflow" {
-  cidr_block           = var.vpc_cidr_block
+  cidr_block = var.vpc_cidr_block
 
   tags = "vpc-airflow-dev"
 }
 
 resource "aws_subnet" "private" {
-  for_each = var.private_subnets
-  vpc_id            = aws_vpc.vpc-airflow.id
-  cidr_block        = each.value
+  for_each                = var.private_subnets
+  vpc_id                  = aws_vpc.vpc-airflow.id
+  cidr_block              = each.value
   map_public_ip_on_launch = true
 
   tags = {

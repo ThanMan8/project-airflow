@@ -84,13 +84,13 @@ data "aws_iam_policy_document" "execution_role_policy" {
       "arn:aws:sqs:${var.region}:*:airflow-celery-*"
     ]
   }
-  }
+}
 
 
 resource "aws_iam_role" "role" {
-  name                 = "airflow-execution-role"
-  path                 = "/"
-  tags                 = "I-am-role-dev"
+  name = "airflow-execution-role"
+  path = "/"
+  tags = "I-am-role-dev"
 }
 
 resource "aws_iam_role_policy" "role-policy" {
