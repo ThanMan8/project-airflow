@@ -44,8 +44,7 @@ def transform_load_data(task_instance):
                         }
     transformed_data_list = [transformed_data]
     df_data = pd.DataFrame(transformed_data_list)
-    aws_credentials = {"key":"ASIASOWDKPMHHMSCAUEW","secret": "Fu2/t3pujpwQ9C45vfPt6B4ggRahXKFiN5bEz/p0","token": "IQoJb3JpZ2luX2VjEHsaCXVzLWVhc3QtMSJHMEUCIHOYVkLikBXOo55zIl/YpMSrfg02AmHr4bW+igvfZGcXAiEAn9ls7/4KG8C6GDMWr1XpAmmlnNaO8NVJEaOewtvo2QAq9AEI8///////////ARABGgwxNjg5ODcwOTc4NzAiDNdk8oOj8Du2mEAeUSrIAbxoJuiXHaa2+IHrziWaZ9AaMT274zVDpVqWCbD3un3Hrs//0+9uOb8sd2NuC2qAT6ZkhEkZfJrR94o25LDEgJ+q9iqXCIU9nPisaBj4qflpchf/x9lADQoOZkCl0ykxreN0AQSK74xSYGxragJk/0baeh7B6CR+FAQoqpVmX2tMwZLYA+bfo0nJp5WPIFNr4NWmeETel2ow6nMKcJq3hvQjn/rbw+MU1jFyYqFB3MMaZrBRzFfq+piHpt7gP7MqahlqXfjKLIMkMJG62LIGOpgB5d9ADATvbrpSV58U31T+87DRK0e3gC5oq0/VNcF3zxZ1C2qKL1Ho5DiwSgqU4U4OomEwrA7z2ScDlhM4T4nQ0wjhNY/1fNcpBBBg0T4PLsp6ZY+iKHiz/LfWTDRkClAg/jXx2VOzAdyt1Heb9sZEPaE8dZqZfO4NqW59PlQU6AQAofe4Zr2Woav/3fUF9JIBsV41oRpPDQc="}
-
+    aws_credentials = {"key":"*","secret": "*"
     now = datetime.now()
     dt_string = now.strftime("%d%m%Y%H%M%S")
     dt_string = 'current_weather_data_portland_' + dt_string
